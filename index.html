@@ -1,509 +1,173 @@
-```html
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>John's 7th Cosmic Birthday Invitation</title>
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Rich Display, Script & Arabic Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700;900&family=Fredoka:wght@500;600;700&family=Great+Vibes&family=Luckiest+Guy&family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet" />
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JOHN - Birthday Invitation</title>
   <style>
-    :root {
-      --sky-deep: #020512;
-      --sky-mid: #081234;
-      --gold-light: #fff9db;
-      --gold-mid: #ffd15c;
-      --gold-rich: #d98218;
-    }
-
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
       -webkit-tap-highlight-color: transparent;
     }
 
     html, body {
-      margin: 0;
-      padding: 0;
       width: 100%;
-      min-height: 100%;
-      background-color: var(--sky-deep);
+      min-height: 100vh;
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
+      background: radial-gradient(circle at top, #172554 0%, #090d1e 65%, #04060e 100%);
       color: #ffffff;
-      font-family: 'Fredoka', 'Tajawal', sans-serif;
       overflow-x: hidden;
     }
 
-    .font-arabic { font-family: 'Tajawal', sans-serif; }
-    .font-script-gold { font-family: 'Great Vibes', cursive; }
-    .font-royal-gold { font-family: 'Cinzel Decorative', serif; }
-    .font-bold-display { font-family: 'Luckiest Guy', cursive; }
-
-    /* Hyper-Realistic 3D Volumetric Moon Typography */
-    .moon-birthday-script {
-      font-family: 'Great Vibes', cursive;
-      background: linear-gradient(180deg, #8c4a08 0%, #5c2d04 55%, #3d1c02 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter: drop-shadow(0 1px 0 rgba(255, 252, 230, 0.9)) drop-shadow(0 2px 4px rgba(92, 45, 4, 0.25));
-    }
-
-    .moon-john-3d {
-      font-family: 'Cinzel Decorative', serif;
-      font-weight: 900;
-      background: linear-gradient(180deg, #3a1d06 0%, #1e1238 52%, #0e0821 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      filter:
-        drop-shadow(0 1.5px 0 rgba(255, 250, 224, 0.95))
-        drop-shadow(0 4px 8px rgba(15, 23, 42, 0.35));
-      letter-spacing: 0.04em;
-    }
-
-    .moon-turning-label {
-      color: #4a280a;
-      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
-      letter-spacing: 0.14em;
-    }
-
-    .moon-ornate-seven {
-      font-family: 'Cinzel Decorative', serif;
-      font-weight: 900;
-      background: linear-gradient(180deg, #fff59d 0%, #ffb300 45%, #c66900 85%, #7f3900 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      -webkit-text-stroke: 1.5px #3b1c03;
-      paint-order: stroke fill;
-      filter:
-        drop-shadow(0 3px 0 #3b1c03)
-        drop-shadow(0 0 14px rgba(255, 193, 7, 0.85));
-      display: inline-block;
-      animation: sevenGlowFloat 2.8s ease-in-out infinite;
-    }
-
-    @keyframes sevenGlowFloat {
-      0%, 100% { transform: scale(1) translateY(0); }
-      50% { transform: scale(1.09) translateY(-2px); }
-    }
-
-    /* Stage 1: Night Sky Curtains */
-    .sky-curtain-wrapper {
+    /* طبقة النجوم لا تعترض النقر أبداً */
+    #starsLayer {
       position: fixed;
       inset: 0;
-      z-index: 40;
-      pointer-events: auto;
-      overflow: hidden;
-      transition: visibility 1.35s ease;
-    }
-
-    .sky-curtain-wrapper.opened {
       pointer-events: none;
-      visibility: hidden;
+      z-index: 1;
+      overflow: hidden;
     }
 
-    .sky-half {
+    .star {
       position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 50.6%;
-      background:
-        radial-gradient(circle at 28% 22%, rgba(56, 102, 235, 0.24), transparent 55%),
-        radial-gradient(circle at 72% 78%, rgba(139, 92, 246, 0.22), transparent 55%),
-        linear-gradient(180deg, #02040f 0%, #07102c 50%, #030718 100%);
-      transition: transform 1.35s cubic-bezier(0.77, 0, 0.175, 1), opacity 1.2s ease;
-      will-change: transform;
+      border-radius: 50%;
+      background: #fffbeb;
+      box-shadow: 0 0 8px rgba(254, 240, 138, 0.9);
+      animation: twinkle var(--dur, 3s) ease-in-out infinite;
     }
 
-    .sky-half-left {
-      left: 0;
-      border-right: 1px solid rgba(255, 220, 125, 0.16);
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.25; transform: scale(0.85); }
+      50% { opacity: 1; transform: scale(1.25); }
     }
 
-    .sky-half-right {
-      right: 0;
-      border-left: 1px solid rgba(255, 220, 125, 0.16);
-    }
-
-    .sky-curtain-wrapper.opened .sky-half-left {
-      transform: translateX(-105%);
-      opacity: 0.15;
-    }
-
-    .sky-curtain-wrapper.opened .sky-half-right {
-      transform: translateX(105%);
-      opacity: 0.15;
-    }
-
-    /* Interactive Hyper-Realistic 3D Golden Moon Trigger */
-    .moon-trigger-stage {
-      position: absolute;
-      inset: 0;
+    /* شاشة البداية: السماء والقمر الذهبي */
+    #skyScreen {
+      position: relative;
+      z-index: 5;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 45;
-      padding: 1.5rem;
-      transition: opacity 0.65s ease, transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+      gap: 24px;
+      padding: 24px;
+      text-align: center;
+      transition: opacity 0.45s ease, transform 0.45s ease;
     }
 
-    .sky-curtain-wrapper.opened .moon-trigger-stage {
+    #skyScreen.hidden {
       opacity: 0;
-      transform: scale(2.1);
+      transform: scale(1.06);
       pointer-events: none;
-    }
-
-    .golden-moon-btn {
-      position: relative;
-      width: min(58vw, 245px);
-      height: min(58vw, 245px);
-      border-radius: 9999px;
-      border: none;
-      cursor: pointer;
-      overflow: hidden;
-      background: radial-gradient(circle at 34% 30%, #fffdf2 0%, #ffe699 36%, #f5b942 75%, #c77812 100%);
-      box-shadow:
-        0 0 45px rgba(255, 221, 115, 0.78),
-        0 0 110px rgba(255, 184, 52, 0.5),
-        0 0 180px rgba(255, 152, 0, 0.3),
-        inset -20px -22px 42px rgba(138, 72, 6, 0.52),
-        inset 14px 14px 30px rgba(255, 255, 245, 0.92);
-      animation: moonBreathe 3.4s ease-in-out infinite;
-      transition: transform 0.25s ease;
-    }
-
-    .golden-moon-btn:hover { transform: scale(1.05); }
-    .golden-moon-btn:active { transform: scale(0.95); }
-
-    .moon-corona-ring {
-      position: absolute;
-      inset: -24px;
-      border-radius: 9999px;
-      border: 1.5px solid rgba(255, 228, 145, 0.35);
-      box-shadow: 0 0 35px rgba(255, 210, 95, 0.28);
-      animation: coronaPulse 3.4s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    .moon-orbit-track {
-      position: absolute;
-      inset: -38px;
-      border-radius: 9999px;
-      border: 1px dashed rgba(255, 232, 163, 0.42);
-      animation: slowSpin 22s linear infinite;
-      pointer-events: none;
-    }
-
-    .moon-orbit-track::after {
-      content: '✦';
-      position: absolute;
-      top: -11px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: #fff6cc;
-      font-size: 18px;
-      text-shadow: 0 0 12px #ffd54f;
-    }
-
-    @keyframes moonBreathe {
-      0%, 100% {
-        transform: scale(1) translateY(0);
-        box-shadow:
-          0 0 45px rgba(255, 221, 115, 0.75),
-          0 0 110px rgba(255, 184, 52, 0.48),
-          inset -20px -22px 42px rgba(138, 72, 6, 0.52),
-          inset 14px 14px 30px rgba(255, 255, 245, 0.92);
-      }
-      50% {
-        transform: scale(1.04) translateY(-5px);
-        box-shadow:
-          0 0 68px rgba(255, 232, 150, 0.95),
-          0 0 145px rgba(255, 195, 68, 0.65),
-          inset -20px -22px 42px rgba(138, 72, 6, 0.46),
-          inset 14px 14px 30px rgba(255, 255, 255, 1);
-      }
-    }
-
-    @keyframes coronaPulse {
-      0%, 100% { transform: scale(1); opacity: 0.6; }
-      50% { transform: scale(1.08); opacity: 1; }
-    }
-
-    @keyframes slowSpin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* Volumetric Light Rays Burst on Moon Click */
-    .volumetric-burst {
       position: fixed;
       inset: 0;
-      z-index: 43;
+    }
+
+    .hint-top {
+      font-size: 1rem;
+      color: #fde68a;
+      letter-spacing: 0.4px;
+    }
+
+    /* زر القمر مضمون الاستجابة */
+    #moonBtn {
+      position: relative;
+      z-index: 10;
+      width: 190px;
+      height: 190px;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      background: radial-gradient(circle at 32% 28%, #fffbeb 0%, #fde047 38%, #eab308 75%, #a16207 100%);
+      box-shadow:
+        0 0 35px rgba(250, 204, 21, 0.65),
+        0 0 80px rgba(234, 179, 8, 0.35),
+        inset -16px -18px 28px rgba(120, 53, 15, 0.38);
+      animation: floatMoon 3.5s ease-in-out infinite;
+      transition: transform 0.2s ease;
+    }
+
+    #moonBtn:hover {
+      transform: scale(1.05);
+    }
+
+    #moonBtn:active {
+      transform: scale(0.95);
+    }
+
+    .crater {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(146, 64, 14, 0.18);
+      box-shadow: inset 2px 2px 4px rgba(120, 53, 15, 0.25);
       pointer-events: none;
-      opacity: 0;
-      background:
-        conic-gradient(from 0deg at 50% 46%,
-          transparent 0deg, rgba(255, 243, 176, 0.45) 18deg, transparent 36deg,
-          transparent 72deg, rgba(255, 224, 130, 0.5) 92deg, transparent 114deg,
-          transparent 155deg, rgba(255, 248, 214, 0.45) 175deg, transparent 198deg,
-          transparent 240deg, rgba(255, 213, 79, 0.45) 260deg, transparent 285deg,
-          transparent 320deg, rgba(255, 243, 176, 0.45) 340deg, transparent 360deg),
-        radial-gradient(circle at 50% 46%, rgba(255, 252, 230, 0.98) 0%, rgba(255, 208, 86, 0.62) 34%, transparent 72%);
     }
 
-    .volumetric-burst.active {
-      animation: volumetricReveal 1.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
+    .c1 { width: 34px; height: 34px; top: 32px; left: 42px; }
+    .c2 { width: 22px; height: 22px; top: 82px; right: 34px; }
+    .c3 { width: 26px; height: 26px; bottom: 38px; left: 56px; }
 
-    @keyframes volumetricReveal {
-      0% { opacity: 0; transform: scale(0.25) rotate(-15deg); }
-      28% { opacity: 1; transform: scale(1.15) rotate(0deg); }
-      100% { opacity: 0; transform: scale(1.9) rotate(18deg); }
-    }
-
-    /* Stage 2: Revealed Pixar-Style 3D Cosmic Scene */
-    .invitation-stage {
-      opacity: 0;
-      transform: scale(0.93) translateY(16px);
-      transition: opacity 0.95s ease 0.38s, transform 1s cubic-bezier(0.22, 1, 0.36, 1) 0.38s;
-    }
-
-    .invitation-stage.visible {
-      opacity: 1;
-      transform: scale(1) translateY(0);
-    }
-
-    /* Realistic 3D Cratered Full Moon Inside Poster */
-    .realistic-card-moon {
-      background: radial-gradient(circle at 38% 32%, #fffef7 0%, #fdf2cf 45%, #edd294 82%, #cfa55b 100%);
-      box-shadow:
-        0 0 42px rgba(255, 235, 165, 0.72),
-        0 0 95px rgba(255, 200, 87, 0.36),
-        inset -16px -18px 34px rgba(154, 112, 48, 0.38),
-        inset 10px 10px 24px rgba(255, 255, 255, 0.95);
-    }
-
-    /* Smooth 60fps Floating Animations */
-    .float-astronaut { animation: floatAstro 4.4s ease-in-out infinite; }
-    .float-rocket { animation: floatRocket 3.2s ease-in-out infinite; }
-    .float-planet { animation: floatPlanet 5.8s ease-in-out infinite; }
-    .float-mini-moon { animation: floatMiniMoon 4.8s ease-in-out infinite; }
-
-    @keyframes floatAstro {
-      0%, 100% { transform: translateY(0px) rotate(-1.5deg); }
-      50% { transform: translateY(-9px) rotate(2.5deg); }
-    }
-
-    @keyframes floatRocket {
-      0%, 100% { transform: translate(0, 0) rotate(-3deg); }
-      50% { transform: translate(4px, -7px) rotate(2deg); }
-    }
-
-    @keyframes floatPlanet {
+    @keyframes floatMoon {
       0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-6px); }
+      50% { transform: translateY(-10px); }
     }
 
-    @keyframes floatMiniMoon {
-      0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-5px) rotate(6deg); }
+    .tap-label {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #ffffff;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(253, 224, 71, 0.4);
+      padding: 10px 20px;
+      border-radius: 999px;
     }
 
-    /* Luminous Glass-and-Gold Cosmic Detail Badges */
-    .cosmic-gold-card {
-      background: linear-gradient(160deg, rgba(11, 22, 58, 0.82) 0%, rgba(6, 13, 38, 0.92) 100%);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1.5px solid rgba(255, 216, 107, 0.38);
+    /* شاشة الدعوة بعد النقر على القمر */
+    #inviteScreen {
+      display: none;
+      position: relative;
+      z-index: 5;
+      min-height: 100vh;
+      padding: 28px 16px 48px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #inviteScreen.active {
+      display: flex;
+      animation: fadeUp 0.55s ease forwards;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      width: 100%;
+      max-width: 440px;
+      background: linear-gradient(180deg, rgba(17, 29, 68, 0.92) 0%, rgba(10, 16, 38, 0.96) 100%);
+      border: 1.5px solid rgba(250, 204, 21, 0.45);
+      border-radius: 28px;
+      padding: 28px 20px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65);
+      text-align: center;
+    }
+
+    /* القمر الذي يحمل العنوان والاسم والعمر */
+    .hero-moon {
+      width: 245px;
+      height: 245px;
+      margin: 0 auto 22px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 25%, #fffef5 0%, #fef08a 42%, #facc15 78%, #ca8a04 100%);
       box-shadow:
-        0 18px 45px rgba(2, 5, 18, 0.78),
-        inset 0 1px 0 rgba(255, 245, 200, 0.22);
-    }
-
-    .cosmic-badge-row {
-      background: linear-gradient(90deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 215, 110, 0.08) 100%);
-      border: 1px solid rgba(255, 216, 107, 0.22);
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-    }
-  </style>
-</head>
-<body class="relative min-h-screen select-none">
-
-  <!-- Full-Screen Multi-Layered Starfield, Nebula, Stardust & Shooting Stars Canvas -->
-  <canvas id="cosmosCanvas" class="fixed inset-0 w-full h-full pointer-events-none z-0"></canvas>
-
-  <!-- Volumetric Light Rays Burst Overlay on Moon Click -->
-  <div id="lightBurst" class="volumetric-burst"></div>
-
-  <!-- =========================================================
-       STAGE 1: INITIAL NIGHT SKY SCREEN WITH 3D GOLDEN MOON
-       ========================================================= -->
-  <div id="skyCurtain" class="sky-curtain-wrapper" aria-label="Night sky cover">
-    <div class="sky-half sky-half-left">
-      <canvas id="leftSkyStars" class="w-full h-full"></canvas>
-    </div>
-    <div class="sky-half sky-half-right">
-      <canvas id="rightSkyStars" class="w-full h-full"></canvas>
-    </div>
-
-    <!-- Centered Hyper-Realistic 3D Golden Moon -->
-    <div class="moon-trigger-stage">
-      <div class="relative flex items-center justify-center">
-        <div class="moon-corona-ring"></div>
-        <div class="moon-orbit-track"></div>
-
-        <button
-          id="openMoonBtn"
-          type="button"
-          class="golden-moon-btn flex items-center justify-center focus:outline-none"
-          aria-label="انقر على القمر لفتح الدعوة • Tap the Moon to Open"
-        >
-          <!-- Realistic Cratered Lunar Surface SVG Overlay -->
-          <svg viewBox="0 0 240 240" class="w-full h-full pointer-events-none opacity-85">
-            <defs>
-              <radialGradient id="craterShade1" cx="35%" cy="35%" r="65%">
-                <stop offset="0%" stop-color="#9c5a14" stop-opacity="0.48" />
-                <stop offset="75%" stop-color="#c98528" stop-opacity="0.22" />
-                <stop offset="100%" stop-color="#fff3c4" stop-opacity="0.55" />
-              </radialGradient>
-              <radialGradient id="craterShade2" cx="30%" cy="30%" r="70%">
-                <stop offset="0%" stop-color="#8a4b0c" stop-opacity="0.42" />
-                <stop offset="80%" stop-color="#bf7b22" stop-opacity="0.18" />
-                <stop offset="100%" stop-color="#fff8dc" stop-opacity="0.5" />
-              </radialGradient>
-            </defs>
-            <!-- Realistic Lunar Craters with Rim Highlights -->
-            <circle cx="64" cy="68" r="22" fill="url(#craterShade1)" />
-            <circle cx="158" cy="62" r="16" fill="url(#craterShade2)" />
-            <circle cx="174" cy="136" r="26" fill="url(#craterShade1)" />
-            <circle cx="76" cy="162" r="24" fill="url(#craterShade2)" />
-            <circle cx="122" cy="112" r="14" fill="url(#craterShade1)" />
-            <circle cx="116" cy="46" r="9" fill="url(#craterShade2)" />
-            <circle cx="44" cy="118" r="11" fill="url(#craterShade1)" />
-            <circle cx="132" cy="184" r="13" fill="url(#craterShade2)" />
-            <circle cx="192" cy="96" r="8" fill="url(#craterShade1)" />
-          </svg>
-        </button>
-      </div>
-
-      <!-- Elegant Glowing Bilingual Prompt -->
-      <div class="mt-9 text-center px-5 py-3 rounded-full bg-slate-950/65 border border-amber-300/40 backdrop-blur-md shadow-[0_0_30px_rgba(255,204,77,0.28)] animate-pulse">
-        <p class="font-arabic text-amber-200 text-base sm:text-lg font-extrabold tracking-wide drop-shadow-[0_0_8px_rgba(255,213,79,0.6)]">
-          انقر على القمر لفتح الدعوة
-        </p>
-        <p class="text-amber-100/90 text-xs sm:text-sm font-semibold tracking-widest uppercase mt-0.5 flex items-center justify-center gap-1.5">
-          <span>✨</span>
-          <span>Tap the Moon to Open</span>
-          <span>✨</span>
-        </p>
-      </div>
-    </div>
-  </div>
-
-  <!-- =========================================================
-       STAGE 2: REVEALED 3D PIXAR-STYLE REALISTIC COSMIC SCENE
-       ========================================================= -->
-  <main id="invitationStage" class="invitation-stage relative z-10 min-h-screen flex flex-col items-center justify-between px-3 py-3 sm:py-5">
-
-    <!-- Sleek Top Floating Controls -->
-    <header class="w-full max-w-md flex items-center justify-between gap-2 mb-2 z-30">
-      <button
-        id="replaySkyBtn"
-        type="button"
-        class="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-slate-950/80 hover:bg-slate-900 border border-amber-300/40 text-amber-200 text-xs sm:text-sm font-semibold shadow-lg backdrop-blur-md transition active:scale-95"
-      >
-        <span>🌙</span>
-        <span class="font-arabic">إعادة العرض</span>
-        <span class="opacity-75 text-[11px]">• Replay</span>
-      </button>
-
-      <button
-        id="toggleEditBtn"
-        type="button"
-        class="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-amber-500/20 hover:bg-amber-500/30 border border-amber-300/55 text-amber-200 text-xs sm:text-sm font-semibold shadow-lg backdrop-blur-md transition active:scale-95"
-      >
-        <span>✏️</span>
-        <span class="font-arabic">تعديل</span>
-        <span class="opacity-85 text-[11px]">• Edit</span>
-      </button>
-    </header>
-
-    <!-- Main 3D Pixar-Style Realistic Cosmic Poster Container -->
-    <section class="relative w-full max-w-md rounded-[2rem] overflow-hidden border-2 border-amber-300/45 shadow-[0_28px_80px_rgba(0,0,0,0.9)] bg-gradient-to-b from-[#040a24] via-[#0b1949] to-[#071236] my-auto">
-
-      <!-- Volumetric Cosmic Clouds & Glowing Planet Earth in Bottom-Right -->
-      <svg viewBox="0 0 420 680" preserveAspectRatio="xMidYMid slice" class="absolute inset-0 w-full h-full pointer-events-none z-0">
-        <defs>
-          <!-- Deep Space Sky Gradient -->
-          <linearGradient id="posterSkyGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#03081c" />
-            <stop offset="48%" stop-color="#0b1a4d" />
-            <stop offset="82%" stop-color="#14286b" />
-            <stop offset="100%" stop-color="#091338" />
-          </linearGradient>
-
-          <!-- Volumetric Nebula Clouds -->
-          <radialGradient id="nebulaBlue" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.34" />
-            <stop offset="60%" stop-color="#1d4ed8" stop-opacity="0.16" />
-            <stop offset="100%" stop-color="#0b1a4d" stop-opacity="0" />
-          </radialGradient>
-
-          <radialGradient id="nebulaPurple" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#a855f7" stop-opacity="0.32" />
-            <stop offset="65%" stop-color="#4338ca" stop-opacity="0.14" />
-            <stop offset="100%" stop-color="#0b1a4d" stop-opacity="0" />
-          </radialGradient>
-
-          <!-- Realistic Planet Earth Gradient -->
-          <radialGradient id="earthOceanGrad" cx="35%" cy="30%" r="70%">
-            <stop offset="0%" stop-color="#7dd3fc" />
-            <stop offset="35%" stop-color="#0284c7" />
-            <stop offset="75%" stop-color="#1e3a8a" />
-            <stop offset="100%" stop-color="#091338" />
-          </radialGradient>
-
-          <!-- Cratered Lunar Foreground Surface Gradient -->
-          <linearGradient id="lunarHillGrad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#f3d9a4" />
-            <stop offset="45%" stop-color="#c49a5b" />
-            <stop offset="100%" stop-color="#5c4221" />
-          </linearGradient>
-
-          <!-- Weathered Wood Plank Gradient -->
-          <linearGradient id="woodPlankGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#9c6234" />
-            <stop offset="50%" stop-color="#784620" />
-            <stop offset="100%" stop-color="#4d2a10" />
-          </linearGradient>
-        </defs>
-
-        <!-- Base Cosmic Sky -->
-        <rect width="420" height="680" fill="url(#posterSkyGrad)" />
-        <circle cx="110" cy="180" r="190" fill="url(#nebulaBlue)" />
-        <circle cx="320" cy="340" r="210" fill="url(#nebulaPurple)" />
-
-        <!-- Glowing Planet Earth Curving in Bottom-Right Corner -->
-        <g transform="translate(355, 575)">
-          <!-- Atmospheric Halo -->
-          <circle cx="0" cy="0" r="158" fill="#38bdf8" opacity="0.22" />
-          <circle cx="0" cy="0" r="146" fill="url(#earthOceanGrad)" stroke="#bae6fd" stroke-width="2.5" />
-          <!-- Stylized Continents & Swirling Clouds -->
-          <path d="M-95 -45 Q-60 -75 -25 -50 Q5 -30 -15 5 Q-45 25 -80 5 Z" fill="#4ade80" opacity="0.68" />
-          <path d="M-50 40 Q-10 25 25 55 Q45 85 5 105 Q-40 95 -50 40 Z" fill="#22c55e" opacity="0.6" />
-          <path d="M-115 -15 Q-55 -35 15 -10" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity="0.45" />
-          <path d="M-85 35 Q-20 15 45 45" fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" opacity="0.38" />
-        </g>
-
-        <!-- Volumetric Cumulus Space Clouds Along Bottom -->
-        <g opacity="0.9">
-          <circle cx="195" cy="545" r="46" fill="#2b3a7a" />
-          <circle cx="240" cy="532" r="52" fill="#364894" />
-          <circle cx="290" cy="555" r="44" fill="#273570" />
-          <circle cx="155" cy="575" r="48" fill="#1f2b5e" />
-          <circle cx="225" cy="585" r="55" fill
+        0 0 40px rgba(250, 204, 21, 0.55),
+        inset -14px -16px 26px rgba(133, 77, 14, 0.3);
+      color: #1e1b4b;
+      display: flex;
+      flex-direction: column
+      
