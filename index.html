@@ -1,173 +1,541 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>JOHN - Birthday Invitation</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0906">
+  <meta name="description" content="دعوة زفاف">
+  <title>دعوة زفاف</title>
+
   <style>
+    :root {
+      --gold: #d7ae55;
+      --gold-light: #ffedb0;
+      --gold-dark: #895d19;
+      --ink: #0b0906;
+      --cream: #f8edcf;
+      --rose: #cf4967;
+    }
+
     * {
       box-sizing: border-box;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    body {
       margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    html, body {
-      width: 100%;
       min-height: 100vh;
-      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial, sans-serif;
-      background: radial-gradient(circle at top, #172554 0%, #090d1e 65%, #04060e 100%);
-      color: #ffffff;
-      overflow-x: hidden;
+      color: var(--cream);
+      background: #090806;
+      font-family: "Noto Naskh Arabic", "Noto Sans Arabic", Tahoma, serif;
     }
 
-    /* طبقة النجوم لا تعترض النقر أبداً */
-    #starsLayer {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
+    body.intro-open {
       overflow: hidden;
     }
 
-    .star {
-      position: absolute;
-      border-radius: 50%;
-      background: #fffbeb;
-      box-shadow: 0 0 8px rgba(254, 240, 138, 0.9);
-      animation: twinkle var(--dur, 3s) ease-in-out infinite;
+    button {
+      font: inherit;
     }
 
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.25; transform: scale(0.85); }
-      50% { opacity: 1; transform: scale(1.25); }
-    }
-
-    /* شاشة البداية: السماء والقمر الذهبي */
-    #skyScreen {
-      position: relative;
-      z-index: 5;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 24px;
-      padding: 24px;
-      text-align: center;
-      transition: opacity 0.45s ease, transform 0.45s ease;
-    }
-
-    #skyScreen.hidden {
-      opacity: 0;
-      transform: scale(1.06);
-      pointer-events: none;
+    /* شاشة البداية */
+    .intro-screen {
       position: fixed;
       inset: 0;
+      z-index: 100;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 24px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 50% 35%, rgba(192, 145, 48, .17), transparent 34%),
+        radial-gradient(circle at 12% 18%, rgba(255, 226, 153, .25) 0 2px, transparent 3px),
+        radial-gradient(circle at 83% 27%, rgba(255, 226, 153, .28) 0 2px, transparent 3px),
+        radial-gradient(circle at 24% 77%, rgba(255, 226, 153, .18) 0 2px, transparent 3px),
+        linear-gradient(145deg, #080705, #171109 52%, #080705);
+      background-size: auto, 125px 135px, 155px 145px, 190px 180px, auto;
+      transition: opacity .75s ease, transform .75s ease;
     }
 
-    .hint-top {
-      font-size: 1rem;
-      color: #fde68a;
-      letter-spacing: 0.4px;
-    }
-
-    /* زر القمر مضمون الاستجابة */
-    #moonBtn {
-      position: relative;
-      z-index: 10;
-      width: 190px;
-      height: 190px;
-      border: none;
-      border-radius: 50%;
-      cursor: pointer;
-      background: radial-gradient(circle at 32% 28%, #fffbeb 0%, #fde047 38%, #eab308 75%, #a16207 100%);
-      box-shadow:
-        0 0 35px rgba(250, 204, 21, 0.65),
-        0 0 80px rgba(234, 179, 8, 0.35),
-        inset -16px -18px 28px rgba(120, 53, 15, 0.38);
-      animation: floatMoon 3.5s ease-in-out infinite;
-      transition: transform 0.2s ease;
-    }
-
-    #moonBtn:hover {
-      transform: scale(1.05);
-    }
-
-    #moonBtn:active {
-      transform: scale(0.95);
-    }
-
-    .crater {
+    .intro-screen::before {
       position: absolute;
-      border-radius: 50%;
-      background: rgba(146, 64, 14, 0.18);
-      box-shadow: inset 2px 2px 4px rgba(120, 53, 15, 0.25);
+      inset: 14px;
+      border: 1px solid rgba(215, 174, 85, .55);
+      content: "";
       pointer-events: none;
     }
 
-    .c1 { width: 34px; height: 34px; top: 32px; left: 42px; }
-    .c2 { width: 22px; height: 22px; top: 82px; right: 34px; }
-    .c3 { width: 26px; height: 26px; bottom: 38px; left: 56px; }
-
-    @keyframes floatMoon {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+    .intro-screen::after {
+      position: absolute;
+      inset: 21px;
+      border: 1px solid rgba(215, 174, 85, .18);
+      content: "";
+      pointer-events: none;
     }
 
-    .tap-label {
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: #ffffff;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(253, 224, 71, 0.4);
-      padding: 10px 20px;
-      border-radius: 999px;
+    .intro-screen.is-leaving {
+      opacity: 0;
+      transform: scale(1.025);
+      pointer-events: none;
     }
 
-    /* شاشة الدعوة بعد النقر على القمر */
-    #inviteScreen {
-      display: none;
+    .intro-content {
       position: relative;
-      z-index: 5;
+      z-index: 1;
+      width: min(100%, 520px);
+      animation: intro-rise 1s .1s both;
+    }
+
+    .rings {
+      position: relative;
+      width: 145px;
+      height: 116px;
+      margin: 0 auto 15px;
+    }
+
+    .ring {
+      position: absolute;
+      top: 23px;
+      width: 68px;
+      height: 68px;
+      border: 6px solid transparent;
+      border-radius: 50%;
+      background:
+        linear-gradient(#100e0a, #100e0a) padding-box,
+        linear-gradient(135deg, #fff1b8, #a87522, #ffeaa0, #8f611a) border-box;
+      box-shadow: 0 0 20px rgba(215, 174, 85, .2);
+    }
+
+    .ring-one {
+      left: 22px;
+      animation: ring-appear .9s .2s both, ring-glow 2.5s 1.2s infinite;
+    }
+
+    .ring-two {
+      top: 30px;
+      left: 57px;
+      animation: ring-appear .9s .4s both, ring-glow 2.5s 1.4s infinite;
+    }
+
+    .ring-gem {
+      position: absolute;
+      top: 13px;
+      left: 77px;
+      width: 18px;
+      height: 18px;
+      border: 3px solid #fff0ad;
+      background: #c39236;
+      box-shadow: 0 0 15px rgba(255, 224, 139, .9);
+      transform: rotate(45deg);
+      animation: gem-twinkle 1.6s ease-in-out infinite alternate;
+    }
+
+    .intro-kicker {
+      margin: 0 0 12px;
+      color: var(--gold-light);
+      font-size: clamp(1rem, 4vw, 1.25rem);
+      letter-spacing: .04em;
+    }
+
+    .intro-title {
+      margin: 0;
+      color: var(--gold);
+      font-size: clamp(3rem, 12vw, 5rem);
+      line-height: 1.2;
+      text-shadow: 0 0 25px rgba(215, 174, 85, .25);
+    }
+
+    .intro-message {
+      margin: 12px auto 24px;
+      color: #e9d8ad;
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      line-height: 1.9;
+    }
+
+    .open-button {
+      min-height: 52px;
+      padding: 10px 27px;
+      border: 1px solid #ffe8a0;
+      border-radius: 30px;
+      color: #211707;
+      background: linear-gradient(135deg, #fff0b7, #d4a542 55%, #f8df91);
+      box-shadow: 0 8px 28px rgba(204, 157, 58, .2);
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .open-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 34px rgba(204, 157, 58, .32);
+    }
+
+    .open-button:focus-visible,
+    .replay-button:focus-visible {
+      outline: 3px solid #fff0b7;
+      outline-offset: 4px;
+    }
+
+    .auto-note {
+      margin: 14px 0 0;
+      color: #b8a675;
+      font-size: .82rem;
+    }
+
+    /* بطاقة الدعوة */
+    .invitation {
+      position: relative;
+      z-index: 1;
       min-height: 100vh;
-      padding: 28px 16px 48px;
-      align-items: center;
-      justify-content: center;
+      min-height: 100svh;
+      overflow: hidden;
+      padding: 26px 14px 42px;
+      color: var(--cream);
+      background:
+        radial-gradient(ellipse at 50% 0, rgba(179, 126, 34, .16), transparent 42%),
+        linear-gradient(180deg, #100e0a, #080806 65%, #120f09);
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity .8s ease, transform .8s ease;
     }
 
-    #inviteScreen.active {
-      display: flex;
-      animation: fadeUp 0.55s ease forwards;
+    .invitation.is-visible {
+      opacity: 1;
+      transform: none;
     }
 
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(22px); }
+    .invite-shell {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 620px);
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .invite-heading {
+      margin: 0 auto 18px;
+      color: var(--gold-light);
+    }
+
+    .invite-heading p {
+      margin: 0 0 9px;
+      font-size: 1rem;
+    }
+
+    .invite-heading h1 {
+      margin: 0;
+      color: var(--gold);
+      font-size: clamp(1.5rem, 6vw, 2.2rem);
+    }
+
+    .ornament {
+      margin: 10px 0;
+      color: var(--gold);
+      letter-spacing: .18em;
+      opacity: .85;
+    }
+
+    .invitation-frame {
+      width: min(100%, 570px);
+      margin: 0 auto;
+      padding: 6px;
+      border: 1px solid #d7ae55;
+      background: linear-gradient(135deg, #fff0b0, #805316, #e6c368);
+      box-shadow:
+        0 18px 55px rgba(0, 0, 0, .55),
+        0 0 24px rgba(215, 174, 85, .14);
+    }
+
+    .invitation-frame img {
+      display: block;
+      width: 100%;
+      height: auto;
+      border: 1px solid rgba(255, 235, 177, .42);
+      background: #080806;
+    }
+
+    .image-error {
+      padding: 30px 18px;
+      color: #ffe7a1;
+      line-height: 1.9;
+    }
+
+    .closing-message {
+      margin: 22px 0 14px;
+      color: #f0d68f;
+      font-size: 1.05rem;
+      line-height: 1.9;
+    }
+
+    .replay-button {
+      padding: 10px 18px;
+      border: 1px solid rgba(215, 174, 85, .7);
+      border-radius: 24px;
+      color: var(--gold-light);
+      background: rgba(215, 174, 85, .08);
+      cursor: pointer;
+    }
+
+    /* بتلات الورد المتساقطة */
+    .petal-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .petal {
+      position: absolute;
+      top: -35px;
+      width: var(--petal-width);
+      height: var(--petal-height);
+      border-radius: 100% 0 100% 0;
+      background: linear-gradient(
+        135deg,
+        #ffe5e9 0%,
+        var(--petal-color) 43%,
+        #972443 100%
+      );
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .25));
+      opacity: 0;
+      animation: petal-fall var(--fall-duration) linear var(--fall-delay) infinite;
+    }
+
+    .petal::after {
+      position: absolute;
+      top: 16%;
+      left: 49%;
+      width: 1px;
+      height: 68%;
+      background: rgba(255, 255, 255, .38);
+      content: "";
+      transform: rotate(28deg);
+    }
+
+    @keyframes intro-rise {
+      from { opacity: 0; transform: translateY(18px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .card {
-      width: 100%;
-      max-width: 440px;
-      background: linear-gradient(180deg, rgba(17, 29, 68, 0.92) 0%, rgba(10, 16, 38, 0.96) 100%);
-      border: 1.5px solid rgba(250, 204, 21, 0.45);
-      border-radius: 28px;
-      padding: 28px 20px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65);
-      text-align: center;
+    @keyframes ring-appear {
+      from { opacity: 0; transform: translateY(15px) scale(.75) rotate(-12deg); }
+      to { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
     }
 
-    /* القمر الذي يحمل العنوان والاسم والعمر */
-    .hero-moon {
-      width: 245px;
-      height: 245px;
-      margin: 0 auto 22px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 35% 25%, #fffef5 0%, #fef08a 42%, #facc15 78%, #ca8a04 100%);
-      box-shadow:
-        0 0 40px rgba(250, 204, 21, 0.55),
-        inset -14px -16px 26px rgba(133, 77, 14, 0.3);
-      color: #1e1b4b;
-      display: flex;
-      flex-direction: column
-      
+    @keyframes ring-glow {
+      0%, 100% { box-shadow: 0 0 12px rgba(215, 174, 85, .18); }
+      50% { box-shadow: 0 0 25px rgba(255, 224, 139, .5); }
+    }
+
+    @keyframes gem-twinkle {
+      from { opacity: .72; transform: rotate(45deg) scale(.88); }
+      to { opacity: 1; transform: rotate(45deg) scale(1.12); }
+    }
+
+    @keyframes petal-fall {
+      0% {
+        opacity: 0;
+        transform: translate3d(0, -10vh, 0) rotate(0deg);
+      }
+      10% {
+        opacity: var(--petal-opacity);
+      }
+      48% {
+        transform: translate3d(var(--drift-mid), 52vh, 0) rotate(var(--spin-mid));
+      }
+      90% {
+        opacity: var(--petal-opacity);
+      }
+      100% {
+        opacity: 0;
+        transform: translate3d(var(--drift-end), 112vh, 0) rotate(var(--spin-end));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .invitation {
+        padding: 20px 9px 34px;
+      }
+
+      .invitation-frame {
+        padding: 4px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="intro-open">
+
+  <section class="intro-screen" id="intro" aria-label="مقدمة دعوة الزفاف">
+    <div class="intro-content">
+      <div class="rings" aria-hidden="true">
+        <span class="ring ring-one"></span>
+        <span class="ring ring-two"></span>
+        <span class="ring-gem"></span>
+      </div>
+
+      <p class="intro-kicker">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>
+      <h1 class="intro-title">دعوة زفاف</h1>
+
+      <p class="intro-message">
+        بكل الفرح والمحبة،<br>
+        ندعوكم لمشاركتنا ليلة العمر
+      </p>
+
+      <button class="open-button" id="open-button" type="button">
+        افتح بطاقة الدعوة ✦
+      </button>
+
+      <p class="auto-note">ستُفتح الدعوة تلقائيًا بعد لحظات</p>
+    </div>
+  </section>
+
+  <div class="petal-layer" id="petal-layer" aria-hidden="true"></div>
+
+  <main class="invitation" id="invitation" hidden>
+    <div class="invite-shell">
+      <header class="invite-heading">
+        <p>بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>
+        <div class="ornament" aria-hidden="true">✦ ━━━━━ ❧ ━━━━━ ✦</div>
+        <h1>دعوة لحضور حفل الزفاف</h1>
+      </header>
+
+      <figure class="invitation-frame">
+        <img
+          id="invitation-image"
+          src="./wedding-invitation.png"
+          alt="بطاقة دعوة الزفاف"
+        >
+
+        <div class="image-error" id="image-error" hidden>
+          لم أجد صورة الدعوة. ارفعيها بجانب ملف index.html باسم
+          <strong>wedding-invitation.png</strong>، أو غيّري اسم الصورة في الكود.
+        </div>
+      </figure>
+
+      <p class="closing-message">
+        حضوركم يشرفنا ويزيد فرحتنا بهجةً وسرورًا
+      </p>
+
+      <button class="replay-button" id="replay-button" type="button">
+        مشاهدة المقدمة مرة أخرى
+      </button>
+    </div>
+  </main>
+
+  <script>
+    const intro = document.getElementById("intro");
+    const invitation = document.getElementById("invitation");
+    const petalLayer = document.getElementById("petal-layer");
+    const invitationImage = document.getElementById("invitation-image");
+    const imageError = document.getElementById("image-error");
+
+    let hasOpened = false;
+    let autoOpenTimer;
+
+    function showImageError() {
+      invitationImage.hidden = true;
+      imageError.hidden = false;
+    }
+
+    invitationImage.addEventListener("error", showImageError);
+
+    if (invitationImage.complete && invitationImage.naturalWidth === 0) {
+      showImageError();
+    }
+
+    function createPetals() {
+      petalLayer.replaceChildren();
+
+      const colors = ["#c83e5d", "#e27b91", "#a92f4d", "#f0a2af"];
+      const numberOfPetals = window.innerWidth < 600 ? 22 : 36;
+
+      for (let i = 0; i < numberOfPetals; i++) {
+        const petal = document.createElement("span");
+        const size = 9 + Math.random() * 9;
+        const drift = (Math.random() - 0.5) * 180;
+        const spin = (Math.random() > 0.5 ? 1 : -1) *
+          (360 + Math.random() * 720);
+
+        petal.className = "petal";
+        petal.style.left = Math.random() * 100 + "%";
+        petal.style.setProperty("--petal-width", size + "px");
+        petal.style.setProperty("--petal-height", size * 1.55 + "px");
+        petal.style.setProperty("--petal-color",
+          colors[Math.floor(Math.random() * colors.length)]);
+        petal.style.setProperty("--petal-opacity",
+          (0.58 + Math.random() * 0.3).toFixed(2));
+        petal.style.setProperty("--fall-duration",
+          (8 + Math.random() * 7) + "s");
+        petal.style.setProperty("--fall-delay",
+          (-Math.random() * 12) + "s");
+        petal.style.setProperty("--drift-mid", drift * 0.5 + "px");
+        petal.style.setProperty("--drift-end", drift + "px");
+        petal.style.setProperty("--spin-mid", spin * 0.45 + "deg");
+        petal.style.setProperty("--spin-end", spin + "deg");
+
+        petalLayer.appendChild(petal);
+      }
+    }
+
+    function openInvitation() {
+      if (hasOpened) return;
+
+      hasOpened = true;
+      clearTimeout(autoOpenTimer);
+      intro.classList.add("is-leaving");
+
+      window.setTimeout(() => {
+        intro.hidden = true;
+        document.body.classList.remove("intro-open");
+
+        invitation.hidden = false;
+        requestAnimationFrame(() => {
+          invitation.classList.add("is-visible");
+        });
+
+        createPetals();
+      }, 750);
+    }
+
+    function replayIntro() {
+      hasOpened = false;
+      clearTimeout(autoOpenTimer);
+
+      invitation.classList.remove("is-visible");
+      invitation.hidden = true;
+      petalLayer.replaceChildren();
+
+      intro.hidden = false;
+      intro.classList.remove("is-leaving");
+      document.body.classList.add("intro-open");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+      autoOpenTimer = window.setTimeout(openInvitation, 5500);
+    }
+
+    document.getElementById("open-button")
+      .addEventListener("click", openInvitation);
+
+    document.getElementById("replay-button")
+      .addEventListener("click", replayIntro);
+
+    autoOpenTimer = window.setTimeout(openInvitation, 5500);
+  </script>
+</body>
+</html>
