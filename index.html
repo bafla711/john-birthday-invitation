@@ -3,374 +3,511 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b0906">
-  <meta name="description" content="دعوة زفاف">
+  <meta name="theme-color" content="#070604">
   <title>دعوة زفاف</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;700;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --gold: #d7ae55;
-      --gold-light: #ffedb0;
-      --gold-dark: #895d19;
-      --ink: #0b0906;
-      --cream: #f8edcf;
-      --rose: #cf4967;
+      --gold: #d9b25f;
+      --gold-light: #fff0b8;
+      --gold-dark: #8a5d1a;
+      --ink: #070604;
+      --panel: #120f0a;
+      --cream: #f7ecd0;
+      --muted: #bfa878;
+      --rose: #c94d6c;
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    [hidden] {
-      display: none !important;
-    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       min-height: 100vh;
+      background: var(--ink);
       color: var(--cream);
-      background: #090806;
-      font-family: "Noto Naskh Arabic", "Noto Sans Arabic", Tahoma, serif;
+      font-family: Tajawal, Tahoma, sans-serif;
+      line-height: 1.75;
+      overflow-x: hidden;
     }
 
-    body.intro-open {
-      overflow: hidden;
+    body.locked { overflow: hidden; }
+
+    h1, h2, h3, .serif { font-family: Amiri, serif; font-weight: 700; }
+    button, input, select { font: inherit; }
+
+    #fx {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      pointer-events: none;
     }
 
-    button {
-      font: inherit;
-    }
-
-    /* شاشة البداية */
-    .intro-screen {
+    /* ===== شاشة الظرف ===== */
+    #intro {
       position: fixed;
       inset: 0;
       z-index: 100;
       display: grid;
       place-items: center;
-      overflow: hidden;
-      padding: 24px;
+      padding: 20px;
       text-align: center;
-      background:
-        radial-gradient(circle at 50% 35%, rgba(192, 145, 48, .17), transparent 34%),
-        radial-gradient(circle at 12% 18%, rgba(255, 226, 153, .25) 0 2px, transparent 3px),
-        radial-gradient(circle at 83% 27%, rgba(255, 226, 153, .28) 0 2px, transparent 3px),
-        radial-gradient(circle at 24% 77%, rgba(255, 226, 153, .18) 0 2px, transparent 3px),
-        linear-gradient(145deg, #080705, #171109 52%, #080705);
-      background-size: auto, 125px 135px, 155px 145px, 190px 180px, auto;
-      transition: opacity .75s ease, transform .75s ease;
+      background: radial-gradient(circle at 50% 40%, #2c1e0b, #070604 70%);
+      transition: opacity 1s ease, visibility 1s ease;
     }
 
-    .intro-screen::before {
-      position: absolute;
-      inset: 14px;
-      border: 1px solid rgba(215, 174, 85, .55);
-      content: "";
-      pointer-events: none;
-    }
-
-    .intro-screen::after {
-      position: absolute;
-      inset: 21px;
-      border: 1px solid rgba(215, 174, 85, .18);
-      content: "";
-      pointer-events: none;
-    }
-
-    .intro-screen.is-leaving {
+    #intro.hide {
       opacity: 0;
-      transform: scale(1.025);
-      pointer-events: none;
+      visibility: hidden;
     }
 
-    .intro-content {
+    .envelope {
       position: relative;
-      z-index: 1;
-      width: min(100%, 520px);
-      animation: intro-rise 1s .1s both;
+      width: min(84vw, 340px);
+      height: 210px;
+      margin: 0 auto 26px;
+      cursor: pointer;
+      outline: none;
     }
 
-    .rings {
-      position: relative;
-      width: 145px;
-      height: 116px;
-      margin: 0 auto 15px;
-    }
+    .envelope:focus-visible { box-shadow: 0 0 0 3px var(--gold-light); border-radius: 14px; }
 
-    .ring {
+    .env-body {
       position: absolute;
-      top: 23px;
-      width: 68px;
-      height: 68px;
-      border: 6px solid transparent;
+      inset: 0;
+      border-radius: 14px;
+      background: linear-gradient(145deg, #2a1e0d, #15100a);
+      border: 1px solid rgba(217, 178, 95, .6);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+    }
+
+    .env-card {
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 12%;
+      height: 86%;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: linear-gradient(#fff8e2, #f3e1b3);
+      color: #4a3412;
+      font-family: Amiri, serif;
+      font-size: 1.5rem;
+      transition: transform 1.1s cubic-bezier(.2, .8, .2, 1) .5s;
+    }
+
+    .env-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 55%;
+      z-index: 3;
+      border-radius: 14px 14px 0 0;
+      background: linear-gradient(#3a2a12, #1c150b);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top;
+      transition: transform .8s ease, z-index 0s .4s;
+    }
+
+    .env-seal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      z-index: 4;
+      display: grid;
+      width: 54px;
+      height: 54px;
+      place-items: center;
       border-radius: 50%;
-      background:
-        linear-gradient(#100e0a, #100e0a) padding-box,
-        linear-gradient(135deg, #fff1b8, #a87522, #ffeaa0, #8f611a) border-box;
-      box-shadow: 0 0 20px rgba(215, 174, 85, .2);
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle at 35% 35%, #fff0b8, #b07d2b);
+      color: #2a1a05;
+      font-size: 1.3rem;
+      box-shadow: 0 0 25px rgba(217, 178, 95, .5);
+      animation: pulse 2s infinite;
+      transition: opacity .3s;
     }
 
-    .ring-one {
-      left: 22px;
-      animation: ring-appear .9s .2s both, ring-glow 2.5s 1.2s infinite;
-    }
-
-    .ring-two {
-      top: 30px;
-      left: 57px;
-      animation: ring-appear .9s .4s both, ring-glow 2.5s 1.4s infinite;
-    }
-
-    .ring-gem {
-      position: absolute;
-      top: 13px;
-      left: 77px;
-      width: 18px;
-      height: 18px;
-      border: 3px solid #fff0ad;
-      background: #c39236;
-      box-shadow: 0 0 15px rgba(255, 224, 139, .9);
-      transform: rotate(45deg);
-      animation: gem-twinkle 1.6s ease-in-out infinite alternate;
-    }
-
-    .intro-kicker {
-      margin: 0 0 12px;
-      color: var(--gold-light);
-      font-size: clamp(1rem, 4vw, 1.25rem);
-      letter-spacing: .04em;
-    }
+    .envelope.open .env-flap { transform: rotateX(180deg); z-index: 1; }
+    .envelope.open .env-card { transform: translateY(-95px); }
+    .envelope.open .env-seal { opacity: 0; }
 
     .intro-title {
-      margin: 0;
+      margin: 0 0 8px;
       color: var(--gold);
-      font-size: clamp(3rem, 12vw, 5rem);
-      line-height: 1.2;
-      text-shadow: 0 0 25px rgba(215, 174, 85, .25);
+      font-size: clamp(2.4rem, 9vw, 3.6rem);
     }
 
-    .intro-message {
-      margin: 12px auto 24px;
-      color: #e9d8ad;
-      font-size: clamp(1rem, 4vw, 1.2rem);
-      line-height: 1.9;
+    .intro-hint {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      animation: blink 2s infinite;
     }
 
-    .open-button {
-      min-height: 52px;
-      padding: 10px 27px;
-      border: 1px solid #ffe8a0;
-      border-radius: 30px;
-      color: #211707;
-      background: linear-gradient(135deg, #fff0b7, #d4a542 55%, #f8df91);
-      box-shadow: 0 8px 28px rgba(204, 157, 58, .2);
-      font-weight: 900;
-      cursor: pointer;
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
-
-    .open-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 12px 34px rgba(204, 157, 58, .32);
-    }
-
-    .open-button:focus-visible,
-    .replay-button:focus-visible {
-      outline: 3px solid #fff0b7;
-      outline-offset: 4px;
-    }
-
-    .auto-note {
-      margin: 14px 0 0;
-      color: #b8a675;
-      font-size: .82rem;
-    }
-
-    /* بطاقة الدعوة */
-    .invitation {
+    /* ===== الرأس ===== */
+    .hero {
       position: relative;
-      z-index: 1;
       min-height: 100vh;
       min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 60px 18px;
+      text-align: center;
       overflow: hidden;
-      padding: 26px 14px 42px;
-      color: var(--cream);
       background:
-        radial-gradient(ellipse at 50% 0, rgba(179, 126, 34, .16), transparent 42%),
-        linear-gradient(180deg, #100e0a, #080806 65%, #120f09);
-      opacity: 0;
-      transform: translateY(16px);
-      transition: opacity .8s ease, transform .8s ease;
+        radial-gradient(ellipse at 50% 0%, rgba(201, 150, 56, .22), transparent 55%),
+        linear-gradient(180deg, #100d08, #070604);
     }
 
-    .invitation.is-visible {
+    .hero::before,
+    .hero::after {
+      position: absolute;
+      inset: 14px;
+      border: 1px solid rgba(217, 178, 95, .45);
+      content: "";
+      pointer-events: none;
+    }
+
+    .hero::after { inset: 22px; border-color: rgba(217, 178, 95, .15); }
+
+    .hero-inner { position: relative; z-index: 2; width: min(100%, 680px); }
+
+    .bismillah {
+      margin: 0 0 14px;
+      color: var(--gold-light);
+      font-family: Amiri, serif;
+      font-size: clamp(1.1rem, 4vw, 1.5rem);
+      animation: fade-up 1s .2s both;
+    }
+
+    .kicker {
+      margin: 0 0 10px;
+      color: var(--muted);
+      animation: fade-up 1s .4s both;
+    }
+
+    .names {
+      margin: 0;
+      font-size: clamp(2.6rem, 10vw, 5.2rem);
+      line-height: 1.25;
+      background: linear-gradient(135deg, #fff3c2, #d9b25f 45%, #8a5d1a 70%, #ffe7a0);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 18px rgba(217, 178, 95, .25));
+      animation: fade-up 1.2s .6s both;
+    }
+
+    .names .amp {
+      display: block;
+      margin: 4px 0;
+      font-size: .55em;
+      color: var(--rose);
+    }
+
+    .divider {
+      margin: 18px auto;
+      color: var(--gold);
+      letter-spacing: .5em;
+      animation: fade-up 1s .8s both;
+    }
+
+    .date-line {
+      margin: 0 0 26px;
+      color: var(--cream);
+      font-size: clamp(1.05rem, 4vw, 1.3rem);
+      animation: fade-up 1s 1s both;
+    }
+
+    .countdown {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      max-width: 480px;
+      margin: 0 auto;
+      animation: fade-up 1s 1.2s both;
+    }
+
+    .count-box {
+      padding: 14px 4px;
+      border: 1px solid rgba(217, 178, 95, .35);
+      border-radius: 16px;
+      background: rgba(217, 178, 95, .06);
+      backdrop-filter: blur(4px);
+    }
+
+    .count-box strong {
+      display: block;
+      color: var(--gold-light);
+      font-family: Amiri, serif;
+      font-size: clamp(1.7rem, 6vw, 2.4rem);
+      line-height: 1.1;
+    }
+
+    .count-box span {
+      color: var(--muted);
+      font-size: .78rem;
+      letter-spacing: .08em;
+    }
+
+    .live-message {
+      grid-column: 1 / -1;
+      margin: 0;
+      padding: 16px;
+      color: var(--gold-light);
+      font-family: Amiri, serif;
+      font-size: 1.5rem;
+    }
+
+    .scroll-cue {
+      position: absolute;
+      bottom: 26px;
+      left: 50%;
+      color: var(--gold);
+      font-size: .85rem;
+      transform: translateX(-50%);
+      animation: bounce 2s infinite;
+    }
+
+    /* ===== الأقسام ===== */
+    section { position: relative; z-index: 1; }
+
+    .section {
+      width: min(100%, 760px);
+      margin: 0 auto;
+      padding: 70px 20px;
+      text-align: center;
+    }
+
+    .section-title {
+      margin: 0 0 8px;
+      color: var(--gold);
+      font-size: clamp(1.9rem, 7vw, 2.6rem);
+    }
+
+    .section-sub {
+      margin: 0 0 30px;
+      color: var(--muted);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .9s ease, transform .9s ease;
+    }
+
+    .reveal.in {
       opacity: 1;
       transform: none;
     }
 
-    .invite-shell {
-      position: relative;
-      z-index: 1;
-      width: min(100%, 620px);
-      margin: 0 auto;
-      text-align: center;
-    }
-
-    .invite-heading {
-      margin: 0 auto 18px;
-      color: var(--gold-light);
-    }
-
-    .invite-heading p {
-      margin: 0 0 9px;
-      font-size: 1rem;
-    }
-
-    .invite-heading h1 {
-      margin: 0;
-      color: var(--gold);
-      font-size: clamp(1.5rem, 6vw, 2.2rem);
-    }
-
-    .ornament {
-      margin: 10px 0;
-      color: var(--gold);
-      letter-spacing: .18em;
-      opacity: .85;
-    }
-
-    .invitation-frame {
-      width: min(100%, 570px);
+    .card-frame {
+      width: min(100%, 520px);
       margin: 0 auto;
       padding: 6px;
-      border: 1px solid #d7ae55;
-      background: linear-gradient(135deg, #fff0b0, #805316, #e6c368);
-      box-shadow:
-        0 18px 55px rgba(0, 0, 0, .55),
-        0 0 24px rgba(215, 174, 85, .14);
+      border: 1px solid var(--gold);
+      border-radius: 6px;
+      background: linear-gradient(135deg, #fff0b0, #7a5118, #e6c368);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, .6), 0 0 30px rgba(217, 178, 95, .15);
+      transition: transform .4s ease;
     }
 
-    .invitation-frame img {
+    .card-frame:hover { transform: translateY(-6px) rotate(-.4deg); }
+
+    .card-frame img {
       display: block;
       width: 100%;
       height: auto;
-      border: 1px solid rgba(255, 235, 177, .42);
-      background: #080806;
+      border-radius: 3px;
     }
 
-    .image-error {
-      padding: 30px 18px;
-      color: #ffe7a1;
-      line-height: 1.9;
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
     }
 
-    .closing-message {
-      margin: 22px 0 14px;
-      color: #f0d68f;
-      font-size: 1.05rem;
-      line-height: 1.9;
+    .info-card {
+      padding: 24px 14px;
+      border: 1px solid rgba(217, 178, 95, .3);
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(217, 178, 95, .08), rgba(255, 255, 255, .01));
+      transition: transform .3s ease, border-color .3s ease;
     }
 
-    .replay-button {
-      padding: 10px 18px;
-      border: 1px solid rgba(215, 174, 85, .7);
-      border-radius: 24px;
+    .info-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold);
+    }
+
+    .info-icon { font-size: 2rem; }
+
+    .info-card h3 {
+      margin: 10px 0 4px;
       color: var(--gold-light);
-      background: rgba(215, 174, 85, .08);
+      font-size: 1.25rem;
+    }
+
+    .info-card p { margin: 0; color: var(--cream); font-size: .95rem; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 26px;
+    }
+
+    .btn {
+      min-height: 48px;
+      padding: 10px 22px;
+      border-radius: 30px;
+      font-weight: 700;
+      text-decoration: none;
       cursor: pointer;
+      transition: transform .2s ease, box-shadow .2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* بتلات الورد المتساقطة */
-    .petal-layer {
+    .btn:hover { transform: translateY(-3px); }
+
+    .btn-gold {
+      border: 1px solid #ffe8a0;
+      color: #211707;
+      background: linear-gradient(135deg, #fff0b7, #d4a542 55%, #f8df91);
+      box-shadow: 0 8px 26px rgba(204, 157, 58, .25);
+    }
+
+    .btn-outline {
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      background: transparent;
+    }
+
+    .quote {
+      margin: 0 auto;
+      max-width: 600px;
+      color: var(--gold-light);
+      font-family: Amiri, serif;
+      font-size: clamp(1.25rem, 4.5vw, 1.6rem);
+      line-height: 2;
+    }
+
+    .quote-sign {
+      margin-top: 18px;
+      color: var(--muted);
+    }
+
+    /* ===== نموذج التأكيد ===== */
+    .rsvp-box {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 28px 22px;
+      border: 1px solid rgba(217, 178, 95, .35);
+      border-radius: 24px;
+      background: var(--panel);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, .4);
+    }
+
+    .field { margin-bottom: 16px; text-align: right; }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .field input,
+    .field select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid rgba(217, 178, 95, .35);
+      border-radius: 12px;
+      color: var(--cream);
+      background: #0b0905;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(217, 178, 95, .2);
+    }
+
+    .rsvp-box .btn { width: 100%; margin-top: 6px; }
+
+    .footer {
+      padding: 50px 20px 60px;
+      text-align: center;
+      color: var(--muted);
+      border-top: 1px solid rgba(217, 178, 95, .2);
+    }
+
+    .footer .footer-names {
+      margin: 0 0 6px;
+      color: var(--gold);
+      font-family: Amiri, serif;
+      font-size: 1.8rem;
+    }
+
+    /* ===== زر الموسيقى ===== */
+    .music-btn {
       position: fixed;
-      inset: 0;
-      z-index: 20;
-      overflow: hidden;
-      pointer-events: none;
+      left: 16px;
+      bottom: 16px;
+      z-index: 60;
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      color: var(--gold-light);
+      background: rgba(12, 10, 6, .85);
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, .4);
     }
 
-    .petal {
-      position: absolute;
-      top: -35px;
-      width: var(--petal-width);
-      height: var(--petal-height);
-      border-radius: 100% 0 100% 0;
-      background: linear-gradient(
-        135deg,
-        #ffe5e9 0%,
-        var(--petal-color) 43%,
-        #972443 100%
-      );
-      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, .25));
-      opacity: 0;
-      animation: petal-fall var(--fall-duration) linear var(--fall-delay) infinite;
+    /* ===== الحركات ===== */
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(22px); }
+      to { opacity: 1; transform: none; }
     }
 
-    .petal::after {
-      position: absolute;
-      top: 16%;
-      left: 49%;
-      width: 1px;
-      height: 68%;
-      background: rgba(255, 255, 255, .38);
-      content: "";
-      transform: rotate(28deg);
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 15px rgba(217, 178, 95, .35); }
+      50% { box-shadow: 0 0 32px rgba(255, 224, 139, .7); }
     }
 
-    @keyframes intro-rise {
-      from { opacity: 0; transform: translateY(18px); }
-      to { opacity: 1; transform: translateY(0); }
+    @keyframes blink {
+      0%, 100% { opacity: .5; }
+      50% { opacity: 1; }
     }
 
-    @keyframes ring-appear {
-      from { opacity: 0; transform: translateY(15px) scale(.75) rotate(-12deg); }
-      to { opacity: 1; transform: translateY(0) scale(1) rotate(0); }
+    @keyframes bounce {
+      0%, 100% { transform: translate(-50%, 0); }
+      50% { transform: translate(-50%, 8px); }
     }
 
-    @keyframes ring-glow {
-      0%, 100% { box-shadow: 0 0 12px rgba(215, 174, 85, .18); }
-      50% { box-shadow: 0 0 25px rgba(255, 224, 139, .5); }
-    }
-
-    @keyframes gem-twinkle {
-      from { opacity: .72; transform: rotate(45deg) scale(.88); }
-      to { opacity: 1; transform: rotate(45deg) scale(1.12); }
-    }
-
-    @keyframes petal-fall {
-      0% {
-        opacity: 0;
-        transform: translate3d(0, -10vh, 0) rotate(0deg);
-      }
-      10% {
-        opacity: var(--petal-opacity);
-      }
-      48% {
-        transform: translate3d(var(--drift-mid), 52vh, 0) rotate(var(--spin-mid));
-      }
-      90% {
-        opacity: var(--petal-opacity);
-      }
-      100% {
-        opacity: 0;
-        transform: translate3d(var(--drift-end), 112vh, 0) rotate(var(--spin-end));
-      }
-    }
-
-    @media (max-width: 480px) {
-      .invitation {
-        padding: 20px 9px 34px;
-      }
-
-      .invitation-frame {
-        padding: 4px;
-      }
+    /* ===== الجوال ===== */
+    @media (max-width: 640px) {
+      .info-grid { grid-template-columns: 1fr; }
+      .countdown { gap: 7px; }
+      .count-box { padding: 12px 2px; }
+      .section { padding: 55px 16px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
+      *, *::before, *::after {
         animation-duration: .01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: .01ms !important;
@@ -379,163 +516,236 @@
   </style>
 </head>
 
-<body class="intro-open">
+<body class="locked">
 
-  <section class="intro-screen" id="intro" aria-label="مقدمة دعوة الزفاف">
-    <div class="intro-content">
-      <div class="rings" aria-hidden="true">
-        <span class="ring ring-one"></span>
-        <span class="ring ring-two"></span>
-        <span class="ring-gem"></span>
+  <!-- شاشة الظرف -->
+  <div id="intro">
+    <div>
+      <div class="envelope" id="envelope" role="button" tabindex="0" aria-label="افتح الدعوة">
+        <div class="env-body"></div>
+        <div class="env-card">دعوة زفاف</div>
+        <div class="env-flap"></div>
+        <div class="env-seal">✦</div>
       </div>
-
-      <p class="intro-kicker">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>
       <h1 class="intro-title">دعوة زفاف</h1>
+      <p class="intro-hint">اضغطي على الظرف لفتح الدعوة</p>
+    </div>
+  </div>
 
-      <p class="intro-message">
-        بكل الفرح والمحبة،<br>
-        ندعوكم لمشاركتنا ليلة العمر
-      </p>
+  <!-- البتلات المتساقطة -->
+  <canvas id="fx" aria-hidden="true"></canvas>
 
-      <button class="open-button" id="open-button" type="button">
-        افتح بطاقة الدعوة ✦
-      </button>
+  <!-- زر الموسيقى -->
+  <button class="music-btn" id="musicBtn" type="button" hidden aria-label="تشغيل أو إيقاف الموسيقى">♫</button>
 
-      <p class="auto-note">ستُفتح الدعوة تلقائيًا بعد لحظات</p>
+  <!-- الرأس -->
+  <header class="hero" id="top">
+    <div class="hero-inner">
+      <p class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>
+      <p class="kicker">يسعدنا دعوتكم لمشاركتنا فرحة العمر</p>
+
+      <h1 class="names">
+        <span id="groomName"></span>
+        <span class="amp">و</span>
+        <span id="brideName"></span>
+      </h1>
+
+      <div class="divider">✦ ✦ ✦</div>
+      <p class="date-line" id="dateLine"></p>
+
+      <div class="countdown" id="countdown">
+        <div class="count-box"><strong id="cd-d">--</strong><span>يوم</span></div>
+        <div class="count-box"><strong id="cd-h">--</strong><span>ساعة</span></div>
+        <div class="count-box"><strong id="cd-m">--</strong><span>دقيقة</span></div>
+        <div class="count-box"><strong id="cd-s">--</strong><span>ثانية</span></div>
+      </div>
+    </div>
+    <div class="scroll-cue">▼ تابعي التفاصيل</div>
+  </header>
+
+  <!-- بطاقة الدعوة -->
+  <section class="section reveal">
+    <h2 class="section-title">بطاقة الدعوة</h2>
+    <p class="section-sub">نتشرف بحضوركم</p>
+    <figure class="card-frame">
+      <img id="cardImage" src="./wedding-invitation.png" alt="بطاقة دعوة الزفاف">
+    </figure>
+  </section>
+
+  <!-- التفاصيل -->
+  <section class="section reveal">
+    <h2 class="section-title">موعد الحفل</h2>
+    <p class="section-sub">احفظوا التاريخ لتكونوا معنا</p>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon">📅</div>
+        <h3>التاريخ</h3>
+        <p id="infoDate"></p>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🕗</div>
+        <h3>الوقت</h3>
+        <p id="infoTime"></p>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">📍</div>
+        <h3>المكان</h3>
+        <p id="infoVenue"></p>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-gold" id="calendarBtn" type="button">أضف إلى التقويم</button>
+      <a class="btn btn-outline" id="mapBtn" target="_blank" rel="noopener noreferrer">موقع القاعة</a>
     </div>
   </section>
 
-  <div class="petal-layer" id="petal-layer" aria-hidden="true"></div>
+  <!-- رسالة -->
+  <section class="section reveal">
+    <p class="quote" id="quoteText"></p>
+    <p class="quote-sign" id="quoteSign"></p>
+  </section>
 
-  <main class="invitation" id="invitation" hidden>
-    <div class="invite-shell">
-      <header class="invite-heading">
-        <p>بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيمِ</p>
-        <div class="ornament" aria-hidden="true">✦ ━━━━━ ❧ ━━━━━ ✦</div>
-        <h1>دعوة لحضور حفل الزفاف</h1>
-      </header>
+  <!-- تأكيد الحضور -->
+  <section class="section reveal">
+    <h2 class="section-title">تأكيد الحضور</h2>
+    <p class="section-sub">أكّدوا حضوركم لنعرف عدد الضيوف</p>
 
-      <figure class="invitation-frame">
-        <img
-          id="invitation-image"
-          src="./wedding-invitation.png"
-          alt="بطاقة دعوة الزفاف"
-        >
+    <form class="rsvp-box" id="rsvpForm">
+      <div class="field">
+        <label for="guestName">الاسم الكريم</label>
+        <input id="guestName" name="name" type="text" required placeholder="اكتب اسمك">
+      </div>
 
-        <div class="image-error" id="image-error" hidden>
-          لم أجد صورة الدعوة. ارفعيها بجانب ملف index.html باسم
-          <strong>wedding-invitation.png</strong>، أو غيّري اسم الصورة في الكود.
-        </div>
-      </figure>
+      <div class="field">
+        <label for="attend">هل ستحضرون؟</label>
+        <select id="attend" name="attend">
+          <option value="yes">نعم، بإذن الله</option>
+          <option value="no">للأسف لا أستطيع</option>
+        </select>
+      </div>
 
-      <p class="closing-message">
-        حضوركم يشرفنا ويزيد فرحتنا بهجةً وسرورًا
-      </p>
+      <div class="field">
+        <label for="guests">عدد الحضور</label>
+        <select id="guests" name="guests">
+          <option>1</option><option>2</option><option>3</option><option>4</option>
+          <option>5</option><option>6</option><option>7</option><option>8</option>
+        </select>
+      </div>
 
-      <button class="replay-button" id="replay-button" type="button">
-        مشاهدة المقدمة مرة أخرى
-      </button>
-    </div>
-  </main>
+      <button class="btn btn-gold" type="submit">إرسال التأكيد عبر واتساب</button>
+    </form>
+  </section>
+
+  <footer class="footer">
+    <p class="footer-names" id="footerNames"></p>
+    <p>بحضوركم يتم لنا الفرح والسرور</p>
+  </footer>
 
   <script>
+    /* ===================================
+       عدّلي هذه الإعدادات فقط
+       =================================== */
+    const CONFIG = {
+      groom: "عبدالسلام محمد",
+      bride: "اسم العروس",
+
+      // التاريخ والوقت بصيغة: السنة-الشهر-اليوم T الساعة:الدقيقة:00 +03:00
+      weddingDate: "2027-06-10T20:00:00+03:00",
+
+      dateText: "الخميس، ليلة الجمعة",
+      timeText: "8:00 مساءً",
+      venue: "قاعة زفاف للاحتفالات",
+      mapQuery: "Mukalla, Yemen",
+
+      // رقم واتساب لاستقبال التأكيدات بدون + أو مسافات
+      whatsapp: "967XXXXXXXXX",
+
+      // رابط ملف موسيقى MP3 مرخّص، أو اتركيه فارغًا
+      music: "",
+
+      quote: "سائلين المولى عز وجل أن يجعله زواجًا مباركًا، وأن يرزقنا السكينة والمودة.",
+      quoteSign: "أخوكم / عبدالسلام محمد"
+    };
+
+    /* ===== تعبئة البيانات ===== */
+    document.getElementById("groomName").textContent = CONFIG.groom;
+    document.getElementById("brideName").textContent = CONFIG.bride;
+    document.getElementById("footerNames").textContent = `${CONFIG.groom} & ${CONFIG.bride}`;
+    document.getElementById("dateLine").textContent = CONFIG.dateText + " — " + CONFIG.timeText;
+    document.getElementById("infoDate").textContent = CONFIG.dateText;
+    document.getElementById("infoTime").textContent = CONFIG.timeText;
+    document.getElementById("infoVenue").textContent = CONFIG.venue;
+    document.getElementById("quoteText").textContent = CONFIG.quote;
+    document.getElementById("quoteSign").textContent = CONFIG.quoteSign;
+    document.getElementById("mapBtn").href =
+      "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(CONFIG.mapQuery);
+
+    /* إخفاء الصورة إذا لم تُرفع */
+    const cardImage = document.getElementById("cardImage");
+    cardImage.addEventListener("error", () => {
+      cardImage.closest(".section").style.display = "none";
+    });
+
+    /* ===== شاشة الظرف ===== */
     const intro = document.getElementById("intro");
-    const invitation = document.getElementById("invitation");
-    const petalLayer = document.getElementById("petal-layer");
-    const invitationImage = document.getElementById("invitation-image");
-    const imageError = document.getElementById("image-error");
+    const envelope = document.getElementById("envelope");
+    const musicBtn = document.getElementById("musicBtn");
+    let opened = false;
 
-    let hasOpened = false;
-    let autoOpenTimer;
-
-    function showImageError() {
-      invitationImage.hidden = true;
-      imageError.hidden = false;
-    }
-
-    invitationImage.addEventListener("error", showImageError);
-
-    if (invitationImage.complete && invitationImage.naturalWidth === 0) {
-      showImageError();
-    }
-
-    function createPetals() {
-      petalLayer.replaceChildren();
-
-      const colors = ["#c83e5d", "#e27b91", "#a92f4d", "#f0a2af"];
-      const numberOfPetals = window.innerWidth < 600 ? 22 : 36;
-
-      for (let i = 0; i < numberOfPetals; i++) {
-        const petal = document.createElement("span");
-        const size = 9 + Math.random() * 9;
-        const drift = (Math.random() - 0.5) * 180;
-        const spin = (Math.random() > 0.5 ? 1 : -1) *
-          (360 + Math.random() * 720);
-
-        petal.className = "petal";
-        petal.style.left = Math.random() * 100 + "%";
-        petal.style.setProperty("--petal-width", size + "px");
-        petal.style.setProperty("--petal-height", size * 1.55 + "px");
-        petal.style.setProperty("--petal-color",
-          colors[Math.floor(Math.random() * colors.length)]);
-        petal.style.setProperty("--petal-opacity",
-          (0.58 + Math.random() * 0.3).toFixed(2));
-        petal.style.setProperty("--fall-duration",
-          (8 + Math.random() * 7) + "s");
-        petal.style.setProperty("--fall-delay",
-          (-Math.random() * 12) + "s");
-        petal.style.setProperty("--drift-mid", drift * 0.5 + "px");
-        petal.style.setProperty("--drift-end", drift + "px");
-        petal.style.setProperty("--spin-mid", spin * 0.45 + "deg");
-        petal.style.setProperty("--spin-end", spin + "deg");
-
-        petalLayer.appendChild(petal);
-      }
+    const audio = CONFIG.music ? new Audio(CONFIG.music) : null;
+    if (audio) {
+      audio.loop = true;
+      musicBtn.hidden = false;
     }
 
     function openInvitation() {
-      if (hasOpened) return;
+      if (opened) return;
+      opened = true;
 
-      hasOpened = true;
-      clearTimeout(autoOpenTimer);
-      intro.classList.add("is-leaving");
+      envelope.classList.add("open");
+      document.body.classList.remove("locked");
 
-      window.setTimeout(() => {
-        intro.hidden = true;
-        document.body.classList.remove("intro-open");
+      if (audio) {
+        audio.play().then(() => musicBtn.textContent = "❚❚").catch(() => {});
+      }
 
-        invitation.hidden = false;
-        requestAnimationFrame(() => {
-          invitation.classList.add("is-visible");
-        });
-
-        createPetals();
-      }, 750);
+      setTimeout(() => intro.classList.add("hide"), 1800);
     }
 
-    function replayIntro() {
-      hasOpened = false;
-      clearTimeout(autoOpenTimer);
+    envelope.addEventListener("click", openInvitation);
+    envelope.addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openInvitation();
+      }
+    });
 
-      invitation.classList.remove("is-visible");
-      invitation.hidden = true;
-      petalLayer.replaceChildren();
+    musicBtn.addEventListener("click", () => {
+      if (!audio) return;
+      if (audio.paused) {
+        audio.play();
+        musicBtn.textContent = "❚❚";
+      } else {
+        audio.pause();
+        musicBtn.textContent = "♫";
+      }
+    });
 
-      intro.hidden = false;
-      intro.classList.remove("is-leaving");
-      document.body.classList.add("intro-open");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+    /* ===== العد التنازلي ===== */
+    const targetTime = new Date(CONFIG.weddingDate).getTime();
+    const countdownBox = document.getElementById("countdown");
 
-      autoOpenTimer = window.setTimeout(openInvitation, 5500);
-    }
+    function pad(n) { return String(n).padStart(2, "0"); }
 
-    document.getElementById("open-button")
-      .addEventListener("click", openInvitation);
+    function updateCountdown() {
+      const diff = targetTime - Date.now();
 
-    document.getElementById("replay-button")
-      .addEventListener("click", replayIntro);
+      if (diff <= 0) {
+        countdownBox.innerHTML = '<p class="live-message">🎉 بدأ الاحتفال 🎉</p>';
+        clearInterval(countdownTimer);
+        return;
+      }
 
-    autoOpenTimer = window.setTimeout(openInvitation, 5500);
-  </script>
-</body>
-</html>
+      c
